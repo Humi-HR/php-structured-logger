@@ -1,8 +1,6 @@
 name: "Test Suites"
 
-on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+on: pull_request
 
 jobs:
   test:
