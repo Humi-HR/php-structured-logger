@@ -7,3 +7,5 @@
          alt="log structure">
     <figcaption>A log structure.</figcaption>
 </figure>
+
+Test
