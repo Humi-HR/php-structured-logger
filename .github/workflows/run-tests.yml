@@ -36,4 +36,4 @@ jobs:
         run: (composer dump-autoload -o --no-scripts 3>&1 1>&2- 2>&3-) | if grep "psr-4"; then exit 1; else exit 0; fi
 
       - name: Execute Tests
-        run: ./vendor/bin/phpunit .
+        run: ./vendor/bin/phpunit tests
