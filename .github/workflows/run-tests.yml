@@ -1,0 +1,39 @@
+name: "Run Tests"
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  test:
+    runs-on: ubuntu-18.04
+    name: "Run tests"
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          extensions: intl
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v2
+        timeout-minutes: 5
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install Dependencies
+        run: composer install --no-interaction --prefer-dist --no-scripts --optimize-autoloader
+
+      - name: Check PSR-4
+        run: (composer dump-autoload -o --no-scripts 3>&1 1>&2- 2>&3-) | if grep "psr-4"; then exit 1; else exit 0; fi
+
+      - name: Execute Tests
+        run: ./vendor/bin/phpunit tests

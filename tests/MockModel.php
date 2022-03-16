@@ -1,6 +1,6 @@
 <?php
 
-namespace Humi\StructuredLogger;
+namespace Humi\StructuredLogger\Tests;
 
 /**
  * MockModel tries hard to act like a Laravel model.
