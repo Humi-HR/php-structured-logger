@@ -73,6 +73,8 @@ This is an example of configuration for the HR app found in `/config/logging.php
 ]
 ```
 
+## Additional Helpers
+
 ## Notes
 
 This logger will output JSON to a text file. It is not the logger's responsibility to send the contents of the text file somewhere useful.
