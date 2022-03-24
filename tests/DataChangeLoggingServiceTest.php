@@ -1,10 +1,9 @@
 <?php
 
-namespace Humi\StructuredLogger\Test;
+namespace Humi\StructuredLogger\Tests;
 
 use Humi\StructuredLogger\DataChangeLoggingService;
 use Humi\StructuredLogger\LogTypes;
-use Humi\StructuredLogger\MockModel;
 use Humi\StructuredLogger\TestLogger;
 use PHPUnit\Framework\TestCase;
 

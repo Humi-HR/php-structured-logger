@@ -1,6 +1,6 @@
 <?php
 
-namespace Humi\StructuredLogger\Test;
+namespace Humi\StructuredLogger\Tests;
 
 use Humi\StructuredLogger\StructuredLogHandler;
 use PHPUnit\Framework\TestCase;
