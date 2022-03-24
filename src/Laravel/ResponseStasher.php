@@ -1,6 +1,6 @@
 <?php
 
-namespace Humi\StructuredLogger;
+namespace Humi\StructuredLogger\Laravel;
 
 use Closure;
 use Symfony\Component\HttpFoundation\Request;
