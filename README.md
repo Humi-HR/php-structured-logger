@@ -75,6 +75,14 @@ This is an example of configuration for the HR app found in `/config/logging.php
 
 ## Additional Helpers
 
+### Test Logger
+
+This package contains a `TestLogger`. This logger is useful for checking that the correct values were logged. It should not be used in production because it doesn't store its log files anywhere.
+
+### Response Stasher
+
+This package contains a `ResponseStasher`. The response stasher should be one of the earliest middelware in the stack. It stashes the response in the service container for use after the request has completed. It can only be used with Laravel.
+
 ## Notes
 
 This logger will output JSON to a text file. It is not the logger's responsibility to send the contents of the text file somewhere useful.
