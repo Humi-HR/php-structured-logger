@@ -36,6 +36,7 @@ class StructuredLogFormatterTest extends TestCase
         $this->assertSame($record['level_name'], $formattedRecord['level_name']);
         $this->assertSame(LogTypes::GENERAL, $formattedRecord['type']);
         $this->assertSame($record['message'], $formattedRecord['message']);
+        $this->assertSame('', $formattedRecord['impersonator'], 'impersonator should default to an empty string');
     }
 
     /** @test */

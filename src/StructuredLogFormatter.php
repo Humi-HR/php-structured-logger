@@ -63,6 +63,7 @@ class StructuredLogFormatter implements FormatterInterface
         $formattedRecord['datetime'] = Carbon::parse($record['datetime'])->toISOString();
         $formattedRecord['delta'] = $this->getDelta($record);
         $formattedRecord['env'] = $this->getEnvironment();
+        $formattedRecord['impersonator'] = $this->getImpersonator();
         $formattedRecord['level'] = $record['level'];
         $formattedRecord['level_name'] = $record['level_name'];
         $formattedRecord['message'] = $record['message'];
@@ -107,6 +108,18 @@ class StructuredLogFormatter implements FormatterInterface
      * log to exist exist.
      */
     protected function getCauserType(): string
+    {
+        return '';
+    }
+
+    /**
+     * getImpersonator returns a string that represents the
+     * impersonator of the current process, if an impersonator exists
+     *
+     * What an impersonator is depends on the system using logger,
+     * but most likely it is one person logging into the account of another person.
+     */
+    protected function getImpersonator(): string
     {
         return '';
     }
