@@ -4,7 +4,6 @@ namespace Humi\StructuredLogger\Tests;
 
 use Humi\StructuredLogger\DataChangeLoggingService;
 use Humi\StructuredLogger\LogTypes;
-use Humi\StructuredLogger\TestLogger;
 use PHPUnit\Framework\TestCase;
 
 class DataChangeLoggingServiceTest extends TestCase
