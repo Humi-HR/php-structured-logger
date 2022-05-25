@@ -1,6 +1,6 @@
 <?php
 
-namespace Humi\StructuredLogger\Tests;
+namespace Humi\StructuredLogger;
 
 use Psr\Log\AbstractLogger;
 
