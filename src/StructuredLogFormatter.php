@@ -60,6 +60,8 @@ class StructuredLogFormatter implements FormatterInterface
         $formattedRecord['causer_id'] = $this->getCauserID();
         $formattedRecord['causer_type'] = $this->getCauserType();
         $formattedRecord['context'] = $record['context'];
+        $formattedRecord['data_id'] = $this->getDataId($record);
+        $formattedRecord['data_type'] = $this->getDataType($record);
         $formattedRecord['datetime'] = Carbon::parse($record['datetime'])->toISOString();
         $formattedRecord['delta'] = $this->getDelta($record);
         $formattedRecord['env'] = $this->getEnvironment();
@@ -196,7 +198,35 @@ class StructuredLogFormatter implements FormatterInterface
     }
 
     /**
-     *  getType determines the type of the log record.
+     * getDataId will return an id associated with a data change
+     * if this record is not a data change record, it will return an empty string
+     *
+     * the return type is a string in the anticipation that ids could be non numeric
+     */
+    protected function getDataId(array $record): string
+    {
+        if (!$this->isDataChange($record)){
+            return '';
+        }
+
+        return (string) $record['context'][LogTypes::DATA_CHANGED]['data_id'];
+    }
+
+    /**
+     * getDataType will return a type associated with a data change
+     * if this record is not a data change record, it will return an empty string
+     */
+    protected function getDataType(array $record): string
+    {
+        if (!$this->isDataChange($record)){
+            return '';
+        }
+
+        return $record['context'][LogTypes::DATA_CHANGED]['data_type'];
+    }
+
+    /**
+     * getType determines the type of the log record.
      */
     protected function getType(array $record): string
     {
@@ -274,5 +304,10 @@ class StructuredLogFormatter implements FormatterInterface
     protected function getEnvironment(): ?string
     {
         return null;
+    }
+
+    protected function isDataChange(array $record): bool
+    {
+        return Arr::exists($record['context'], LogTypes::DATA_CHANGED);
     }
 }

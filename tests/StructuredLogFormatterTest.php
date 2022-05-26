@@ -76,11 +76,54 @@ class StructuredLogFormatterTest extends TestCase
             'datetime' => '2021-03-29',
             'level_name' => 'INFO',
             'message' => 'Some message',
-            'context' => ['data_changed' => []],
+            'context' => ['data_changed' => [
+                'data_id' => 123,
+                'data_type' => 'SOME\TYPE'
+              ]
+            ],
         ];
 
         $formattedRecord = $formatter->format($record);
 
         $this->assertSame(LogTypes::DATA_CHANGED, $formattedRecord['type']);
+    }
+
+    /** @test */
+    public function it_sets_the_data_type_and_id_only_when_one_exists(): void
+    {
+        /**
+         * @var StructuredLogFormatter $formatter
+         */
+        $formatter = new StructuredLogFormatter();
+
+        $record = [
+            'level' => Logger::INFO,
+            'datetime' => '2021-03-29',
+            'level_name' => 'INFO',
+            'message' => 'Some message',
+            'context' => [],
+        ];
+
+        $formattedRecord = $formatter->format($record);
+
+        $this->assertSame('', $formattedRecord['data_id']);
+        $this->assertSame('', $formattedRecord['data_type']);
+
+        $record = [
+            'level' => Logger::INFO,
+            'datetime' => '2021-03-29',
+            'level_name' => 'INFO',
+            'message' => 'Some message',
+            'context' => ['data_changed' => [
+                'data_id' => 123,
+                'data_type' => 'SOME\TYPE'
+              ]
+            ],
+        ];
+
+        $formattedRecord = $formatter->format($record);
+
+        $this->assertSame('123', $formattedRecord['data_id']);
+        $this->assertSame('SOME\TYPE', $formattedRecord['data_type']);
     }
 }
