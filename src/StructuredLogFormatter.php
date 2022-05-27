@@ -209,7 +209,7 @@ class StructuredLogFormatter implements FormatterInterface
             return '';
         }
 
-        return (string) $record['context'][LogTypes::DATA_CHANGED]['data_id'];
+        return (string) $record['context'][LogTypes::DATA_CHANGED]['id'];
     }
 
     /**
