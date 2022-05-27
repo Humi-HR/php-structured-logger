@@ -77,7 +77,7 @@ class StructuredLogFormatterTest extends TestCase
             'level_name' => 'INFO',
             'message' => 'Some message',
             'context' => ['data_changed' => [
-                'data_id' => 123,
+                'id' => 123,
                 'data_type' => 'SOME\TYPE'
               ]
             ],
@@ -115,7 +115,7 @@ class StructuredLogFormatterTest extends TestCase
             'level_name' => 'INFO',
             'message' => 'Some message',
             'context' => ['data_changed' => [
-                'data_id' => 123,
+                'id' => 123,
                 'data_type' => 'SOME\TYPE'
               ]
             ],
