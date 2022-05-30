@@ -60,6 +60,7 @@ class StructuredLogFormatter implements FormatterInterface
         $formattedRecord['causer_id'] = $this->getCauserID();
         $formattedRecord['causer_type'] = $this->getCauserType();
         $formattedRecord['context'] = $record['context'];
+        $formattedRecord['context_as_string'] = json_encode($record['context']);
         $formattedRecord['data_id'] = $this->getDataId($record);
         $formattedRecord['data_type'] = $this->getDataType($record);
         $formattedRecord['datetime'] = Carbon::parse($record['datetime'])->toISOString();
