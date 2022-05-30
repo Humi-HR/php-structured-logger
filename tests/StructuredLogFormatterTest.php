@@ -22,7 +22,7 @@ class StructuredLogFormatterTest extends TestCase
             'datetime' => '2021-03-29',
             'level_name' => 'INFO',
             'message' => 'Some message',
-            'context' => [],
+            'context' => ['field1' => ['field2' => 'my_value']],
         ];
 
         $formattedRecord = $formatter->format($record);
@@ -37,6 +37,7 @@ class StructuredLogFormatterTest extends TestCase
         $this->assertSame(LogTypes::GENERAL, $formattedRecord['type']);
         $this->assertSame($record['message'], $formattedRecord['message']);
         $this->assertSame('', $formattedRecord['impersonator'], 'impersonator should default to an empty string');
+        $this->assertSame(json_encode($record['context']), $formattedRecord['context_as_string'], 'context_raw should be context formatted as json');
     }
 
     /** @test */
