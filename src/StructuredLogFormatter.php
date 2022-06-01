@@ -100,9 +100,9 @@ class StructuredLogFormatter implements FormatterInterface
      * the entity (usually user) that caused this log to
      * exist.
      */
-    protected function getCauserID(): int
+    protected function getCauserID(): string
     {
-        return 0;
+        return '';
     }
 
     /**
