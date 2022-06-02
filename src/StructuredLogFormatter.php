@@ -31,18 +31,25 @@ class StructuredLogFormatter implements FormatterInterface
      * A UUID that groups all records in the current process.
      * The process is usually a request, but might also be a job, command, etc.
      */
-    protected string $uuid;
+    private string $uuid;
 
     /**
      * The request associated with this process
      * This will be null for cli processes, including commands and jobs
      */
-    protected ?Request $request = null;
+    private ?Request $request = null;
+
+    /**
+     * The respone associated with this process
+     * This will be null for cli processes, including commands and jobs
+     */
+    private ?Response $response = null;
 
     public function __construct()
     {
         $this->uuid = Str::uuid()->toString();
         $this->request = $this->getRequest();
+        $this->response = $this->getResponse();
     }
 
     /**
@@ -52,7 +59,7 @@ class StructuredLogFormatter implements FormatterInterface
      * This is the only place a developer should have to look to see what keys exist
      * in our structured log records.
      */
-    public function format(array $record): array
+    final public function format(array $record): array
     {
         $formattedRecord = [];
 
@@ -84,7 +91,7 @@ class StructuredLogFormatter implements FormatterInterface
         return $formattedRecord;
     }
 
-    public function formatBatch(array $records): array
+    final public function formatBatch(array $records): array
     {
         $formattedRecords = [];
 
@@ -127,7 +134,7 @@ class StructuredLogFormatter implements FormatterInterface
         return '';
     }
 
-    protected function getStatusCode(): int
+    final protected function getStatusCode(): int
     {
         if (!$this->hasResponse()) {
             return 0;
@@ -136,7 +143,7 @@ class StructuredLogFormatter implements FormatterInterface
         return $this->getResponse()->getStatusCode();
     }
 
-    protected function getArgs(): string
+    final protected function getArgs(): string
     {
         if (!isset($_SERVER['argv'])) {
             return '';
@@ -145,7 +152,7 @@ class StructuredLogFormatter implements FormatterInterface
         return implode(' ', $_SERVER['argv']);
     }
 
-    protected function getRequestMethod(): string
+    final protected function getRequestMethod(): string
     {
         if (!$this->hasRequest()) {
             return '';
@@ -154,7 +161,7 @@ class StructuredLogFormatter implements FormatterInterface
         return $this->request->method();
     }
 
-    protected function getRemoteAddress(): string
+    final protected function getRemoteAddress(): string
     {
         if (!$this->hasRequest()) {
             return '';
@@ -163,7 +170,7 @@ class StructuredLogFormatter implements FormatterInterface
         return $this->request->ip();
     }
 
-    protected function getRequestURL(): string
+    final protected function getRequestURL(): string
     {
         if (!$this->hasRequest()) {
             return '';
@@ -172,7 +179,7 @@ class StructuredLogFormatter implements FormatterInterface
         return $this->request->url();
     }
 
-    protected function getRequestQuery(): string
+    final protected function getRequestQuery(): string
     {
         if (!$this->hasRequest()) {
             return '';
@@ -189,7 +196,7 @@ class StructuredLogFormatter implements FormatterInterface
         return $parsedUrl['query'];
     }
 
-    protected function getProcessContext(): string
+    final protected function getProcessContext(): string
     {
         if ($this->hasRequest()) {
             return LogContexts::REQUEST;
@@ -204,7 +211,7 @@ class StructuredLogFormatter implements FormatterInterface
      *
      * the return type is a string in the anticipation that ids could be non numeric
      */
-    protected function getDataId(array $record): string
+    final protected function getDataId(array $record): string
     {
         if (!$this->isDataChange($record)){
             return '';
@@ -217,7 +224,7 @@ class StructuredLogFormatter implements FormatterInterface
      * getDataType will return a type associated with a data change
      * if this record is not a data change record, it will return an empty string
      */
-    protected function getDataType(array $record): string
+    final protected function getDataType(array $record): string
     {
         if (!$this->isDataChange($record)){
             return '';
@@ -229,7 +236,7 @@ class StructuredLogFormatter implements FormatterInterface
     /**
      * getType determines the type of the log record.
      */
-    protected function getType(array $record): string
+    final protected function getType(array $record): string
     {
         if (Arr::exists($record['context'], LogTypes::ACTION)) {
             return LogTypes::ACTION;
@@ -256,19 +263,12 @@ class StructuredLogFormatter implements FormatterInterface
         return null;
     }
 
-    /**
-     * hasResponse determines whether there is a Response object
-     * that can be associated with this log. In the context of an HTTP
-     * request, this should return true.
-     *
-     * This should be extended by the child class.
-     */
-    protected function hasResponse(): bool
+    final protected function hasResponse(): bool
     {
-        return false;
+        return (bool) $this->response;
     }
 
-    protected function hasRequest(): bool
+    final protected function hasRequest(): bool
     {
         return (bool) $this->request;
     }
@@ -307,7 +307,7 @@ class StructuredLogFormatter implements FormatterInterface
         return null;
     }
 
-    protected function isDataChange(array $record): bool
+    final protected function isDataChange(array $record): bool
     {
         return Arr::exists($record['context'], LogTypes::DATA_CHANGED);
     }

@@ -59,7 +59,7 @@ class StructuredLogHandler extends AbstractHandler
     /**
      * close is called by Laravel when the app exits
      */
-    public function close(): void
+    final public function close(): void
     {
         $this->format();
         $this->flush();

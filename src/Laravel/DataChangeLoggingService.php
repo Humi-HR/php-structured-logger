@@ -1,7 +1,8 @@
 <?php
 
-namespace Humi\StructuredLogger;
+namespace Humi\StructuredLogger\Laravel;
 
+use Humi\StructuredLogger\LogTypes;
 use Psr\Log\LoggerInterface;
 
 /**
