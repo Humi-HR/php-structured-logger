@@ -213,7 +213,7 @@ class StructuredLogFormatter implements FormatterInterface
      */
     final protected function getDataId(array $record): string
     {
-        if (!$this->isDataChange($record)){
+        if (!$this->isDataChange($record)) {
             return '';
         }
 
@@ -226,7 +226,7 @@ class StructuredLogFormatter implements FormatterInterface
      */
     final protected function getDataType(array $record): string
     {
-        if (!$this->isDataChange($record)){
+        if (!$this->isDataChange($record)) {
             return '';
         }
 
