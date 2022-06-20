@@ -39,17 +39,10 @@ class StructuredLogFormatter implements FormatterInterface
      */
     private ?Request $request = null;
 
-    /**
-     * The respone associated with this process
-     * This will be null for cli processes, including commands and jobs
-     */
-    private ?Response $response = null;
-
     public function __construct()
     {
         $this->uuid = Str::uuid()->toString();
         $this->request = $this->getRequest();
-        $this->response = $this->getResponse();
     }
 
     /**
@@ -135,7 +128,7 @@ class StructuredLogFormatter implements FormatterInterface
 
     final protected function getStatusCode(): int
     {
-        if (!$this->hasResponse()) {
+        if (is_null($this->getResponse())) {
             return 0;
         }
 
@@ -260,11 +253,6 @@ class StructuredLogFormatter implements FormatterInterface
     protected function getResponse(): ?Response
     {
         return null;
-    }
-
-    final protected function hasResponse(): bool
-    {
-        return (bool) $this->response;
     }
 
     final protected function hasRequest(): bool
