@@ -68,9 +68,9 @@ This is an example of configuration for the HR app found in `/config/logging.php
                 'stream' => storage_path('logs/structured.log'),
                 'formatter' => app(HRStructuredLogFormatter::class), // use your extended formatter
             ],
-        ]
-    ]
-]
+        ],
+    ],
+];
 ```
 
 ## Additional Helpers
@@ -82,6 +82,45 @@ This package contains a `TestLogger`. This logger is useful for checking that th
 ### Response Stasher
 
 This package contains a `ResponseStasher`. The response stasher should be one of the earliest middelware in the stack. It stashes the response in the service container for use after the request has completed. It can only be used with Laravel.
+
+## Obfuscation
+
+This PHP logger allows for attribute obfuscation on data changes.
+
+Please review the guidelines for what not to log located in [logging section of Humi docs](https://devdocs.humi.ca/guides/logging/).
+
+### Simple attribute obfuscation
+
+The base model in our HR and Admin apps use the `LogsDataChanges` trait and implements the DataChangeLoggable interface to automatically have their fields logged when data changes.
+
+To obfuscate an attribute in our logs, create an instance variable called `attributesToObfuscateForLogging` on the model, and set its value to an array of keys.
+
+Some model:
+
+```php
+protected array $attributesToObfuscateForLogging = ['sin_number', 'home_address'];
+```
+
+These fields will now be obfuscated in our logs.
+
+### Dynamic attribute obfuscation
+
+There may be times that we want to obfuscate an attribute only if certain conditions are true.
+
+We can do this by overriding the getAttributeNamesToObfuscateForLogging method.
+
+```php
+    public function getAttributeNamesToObfuscateForLogging(): array
+    {
+        // if the secret value is null, we log null
+        if ($this->secret_value === null) {
+            return [];
+        }
+
+        // if the secret value is not null, we obfuscate it
+        return ['secret_value'];
+    }
+```
 
 ## Notes
 
