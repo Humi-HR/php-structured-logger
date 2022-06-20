@@ -74,8 +74,7 @@ class StructuredLogFormatter implements FormatterInterface
         $formattedRecord['delta'] = $this->getDelta($record);
         $formattedRecord['env'] = $this->getEnvironment();
         $formattedRecord['impersonator'] = $this->getImpersonator();
-        $formattedRecord['level'] = $record['level'];
-        $formattedRecord['level_name'] = $record['level_name'];
+        $formattedRecord['level'] = $record['level_name'];
         $formattedRecord['message'] = $record['message'];
         $formattedRecord['process_context'] = $this->getProcessContext();
         $formattedRecord['process_id'] = $this->uuid;

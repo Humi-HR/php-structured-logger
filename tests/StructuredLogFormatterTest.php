@@ -33,7 +33,7 @@ class StructuredLogFormatterTest extends TestCase
         $this->assertArrayHasKey('process_id', $formattedRecord);
         $this->assertArrayHasKey('delta', $formattedRecord);
 
-        $this->assertSame($record['level_name'], $formattedRecord['level_name']);
+        $this->assertSame('INFO', $formattedRecord['level']);
         $this->assertSame('', $formattedRecord['causer_id'], 'causer_id should be a string');
         $this->assertSame(LogTypes::GENERAL, $formattedRecord['type']);
         $this->assertSame($record['message'], $formattedRecord['message']);
