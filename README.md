@@ -87,7 +87,7 @@ This package contains a `ResponseStasher`. The response stasher should be one of
 
 This PHP logger allows for attribute obfuscation on data changes.
 
-Please review the guidelines for what not to log located in [logging section of Humi docs](https://devdocs.humi.ca/guides/logging/).
+Please review the guidelines for what not to log located in [logging section of Humi docs](https://devdocs.humi.ca/guides/logging.html).
 
 ### Simple attribute obfuscation
 
