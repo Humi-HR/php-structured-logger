@@ -5,6 +5,8 @@ namespace Humi\StructuredLogger;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\AbstractHandler;
+use Monolog\Handler\FormattableHandlerInterface;
+use Monolog\Handler\HandlerInterface;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
@@ -20,7 +22,7 @@ use Monolog\Logger;
  * @see https://github.com/Seldaek/monolog
  * @see https://laravel.com/docs/8.x/logging
  */
-class StructuredLogHandler extends AbstractHandler
+class StructuredLogHandler extends AbstractHandler implements FormattableHandlerInterface
 {
     private array $records = [];
     private StreamHandler $streamHandler;
@@ -31,7 +33,6 @@ class StructuredLogHandler extends AbstractHandler
      */
     public function __construct(
         $stream,
-        FormatterInterface $formatter,
         $level = Logger::DEBUG,
         bool $bubble = true,
         ?int $filePermission = null,
@@ -41,8 +42,6 @@ class StructuredLogHandler extends AbstractHandler
 
         $this->streamHandler = new StreamHandler($stream, $level, $bubble, $filePermission, $useLocking);
         $this->streamHandler->setFormatter(new JsonFormatter());
-
-        $this->formatter = $formatter;
     }
 
     public function handle(array $record): bool
@@ -81,6 +80,28 @@ class StructuredLogHandler extends AbstractHandler
      */
     private function format(): void
     {
-        $this->records = $this->formatter->formatBatch($this->records);
+        $this->records = $this->getFormatter()->formatBatch($this->records);
+    }
+
+    /**
+     * Sets the formatter.
+     */
+    public function setFormatter(FormatterInterface $formatter): HandlerInterface
+    {
+        $this->formatter = $formatter;
+
+        return $this;
+    }
+
+    /**
+     * Gets the formatter.
+     */
+    public function getFormatter(): FormatterInterface
+    {
+        if (!isset($this->formatter)) {
+            throw new \LogicException('No formatter has been set and this handler does not have a default formatter');
+        }
+
+        return $this->formatter;
     }
 }
