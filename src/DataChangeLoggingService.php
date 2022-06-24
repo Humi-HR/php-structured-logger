@@ -91,8 +91,10 @@ class DataChangeLoggingService
      */
     private function obfuscateValues(array $attributes, array $attributesToObfuscate): array
     {
+        $obfuscateMap = array_flip($attributesToObfuscate);
+
         foreach ($attributes as $key => $_) {
-            if (in_array($key, $attributesToObfuscate)) {
+            if (array_key_exists($key, $obfuscateMap)) {
                 $attributes[$key] = self::OBFUSCATED_VALUE;
             }
         }
