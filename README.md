@@ -64,9 +64,9 @@ This is an example of configuration for the HR app found in `/config/logging.php
         'structured' => [
             'driver' => 'monolog',
             'handler' => HRStructuredLogHandler::class, // use your extended handler
+            'formatter' => HRStructuredLogFormatter::class,
             'with' => [
                 'stream' => storage_path('logs/structured.log'),
-                'formatter' => app(HRStructuredLogFormatter::class), // use your extended formatter
             ],
         ],
     ],
