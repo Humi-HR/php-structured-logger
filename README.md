@@ -103,6 +103,16 @@ protected array $attributesToObfuscateForLogging = ['sin_number', 'home_address'
 
 These fields will now be obfuscated in our logs.
 
+If instead you want to specify only the attributes not to obfuscate, create an instance variable called `attributesNotToObfuscateForLogging` on the model, and set its value to an array of keys. All other values will be obfuscated.
+
+Some model:
+
+```php
+protected array $attributesNotToObfuscateForLogging = ['favorite_food'];
+```
+
+Do not set both `$attributesToObfuscateForLogging` and `$attributesNotToObfuscateForLogging`. Choose one or the other.
+
 ### Dynamic attribute obfuscation
 
 There may be times that we want to obfuscate an attribute only if certain conditions are true.
