@@ -99,7 +99,7 @@ class StructuredLogHandler extends AbstractHandler implements FormattableHandler
     public function getFormatter(): FormatterInterface
     {
         if (!isset($this->formatter)) {
-            throw new \LogicException('No formatter has been set and this handler does not have a default formatter');
+            $this->formatter = new StructuredLogFormatter(); // Fallback to our default formatter
         }
 
         return $this->formatter;

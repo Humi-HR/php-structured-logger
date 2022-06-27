@@ -2,6 +2,7 @@
 
 namespace Humi\StructuredLogger\Tests;
 
+use Humi\StructuredLogger\StructuredLogFormatter;
 use Humi\StructuredLogger\StructuredLogHandler;
 use PHPUnit\Framework\TestCase;
 use Monolog\Formatter\LineFormatter;
@@ -40,14 +41,12 @@ class StructuredLogHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_throws_an_exception_when_no_formatter(): void
+    public function it_uses_our_default_when_no_formatter_is_set(): void
     {
         $stream = fopen('php://temp', 'r');
-        $handler = new StructuredLogHandler($stream, Logger::INFO, false);
+        $handler = new StructuredLogHandler($stream, Logger::DEBUG, false);
 
-        $this->expectException(\LogicException::class);
-
-        $handler->handle(['level' => Logger::DEBUG]);
-        $handler->close();
+        $this->assertTrue($handler->handle(['level' => Logger::DEBUG]));
+        $this->assertInstanceOf(StructuredLogFormatter::class, $handler->getFormatter());
     }
 }
