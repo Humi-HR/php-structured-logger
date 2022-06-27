@@ -66,7 +66,6 @@ class LogsDataChangesTest extends TestCase
         $this->attributesToObfuscateForLogging = ['age', 'weight'];
         $this->attributesNotToObfuscateForLogging = ['favoriteFood'];
 
-        /* dd($this->getAttributeNamesToObfuscateForLogging()); */
         $this->assertSame(['age', 'weight', 'name'], $this->getAttributeNamesToObfuscateForLogging());
     }
 
