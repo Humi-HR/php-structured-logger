@@ -132,6 +132,17 @@ We can do this by overriding the getAttributeNamesToObfuscateForLogging method.
     }
 ```
 
+### Encrypted attribute obfuscation
+
+The logger will automatically encrypt any value that is _cast_ as encrypted.
+
+```php
+ public $casts = [
+        'some_secret_thing' => 'encrypted', // automatically encrypted
+        'some_number' => 'float', // not automatically encrypted
+    ];
+```
+
 ## Notes
 
 This logger will output JSON to a text file. It is not the logger's responsibility to send the contents of the text file somewhere useful.

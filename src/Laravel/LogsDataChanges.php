@@ -33,6 +33,8 @@ trait LogsDataChanges
             $attributesToObfuscate = array_merge($attributesToObfuscate, $this->getAttributesToObfuscateWhenNegative());
         }
 
+        $attributesToObfuscate = array_merge($attributesToObfuscate, $this->getEncryptedAttributes());
+
         return array_values(array_unique($attributesToObfuscate));
     }
 
@@ -91,5 +93,25 @@ trait LogsDataChanges
         }
 
         return $attrToObfuscate;
+    }
+
+    /**
+     * getEncryptedAttributes looks through the casts property for additional attributes to encrypt
+     */
+    private function getEncryptedAttributes(): array
+    {
+        if (!isset($this->casts)) {
+            return [];
+        }
+
+        $attributes = [];
+
+        foreach ($this->casts as $key => $value) {
+            if (str_starts_with($value, 'encrypted')) {
+                $attributes[] = $key;
+            }
+        }
+
+        return $attributes;
     }
 }

@@ -21,6 +21,8 @@ class LogsDataChangesTest extends TestCase
         'deleted_at' => null,
     ];
 
+    private $casts = [];
+
     /** @test */
     public function it_returns_an_empty_when_no_attributes_to_obfuscate_are_set(): void
     {
@@ -67,6 +69,14 @@ class LogsDataChangesTest extends TestCase
         $this->attributesNotToObfuscateForLogging = ['favoriteFood'];
 
         $this->assertSame(['age', 'weight', 'name'], $this->getAttributeNamesToObfuscateForLogging());
+    }
+
+    /** @test */
+    public function attributes_cast_as_encrypted_are_always_obfuscated(): void
+    {
+        $this->casts = ['age' => 'float', 'weight' => 'encrypted'];
+
+        $this->assertSame(['weight'], $this->getAttributeNamesToObfuscateForLogging());
     }
 
     /**
