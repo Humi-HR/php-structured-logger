@@ -139,6 +139,7 @@ The logger will automatically encrypt any value that is _cast_ as encrypted.
 ```php
  public $casts = [
         'some_secret_thing' => 'encrypted', // automatically encrypted
+        'some_secret_list' => 'encrypted:array', // automatically encrypted
         'some_number' => 'float', // not automatically encrypted
     ];
 ```

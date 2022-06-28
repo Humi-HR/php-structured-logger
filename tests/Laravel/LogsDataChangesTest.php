@@ -74,9 +74,11 @@ class LogsDataChangesTest extends TestCase
     /** @test */
     public function attributes_cast_as_encrypted_are_always_obfuscated(): void
     {
-        $this->casts = ['age' => 'float', 'weight' => 'encrypted'];
+        $this->attributes['friends'] = ['Lucy', 'Bill', 'Susan'];
 
-        $this->assertSame(['weight'], $this->getAttributeNamesToObfuscateForLogging());
+        $this->casts = ['age' => 'float', 'weight' => 'encrypted', 'friends' => 'encrypted:array'];
+
+        $this->assertSame(['weight', 'friends'], $this->getAttributeNamesToObfuscateForLogging());
     }
 
     /**
