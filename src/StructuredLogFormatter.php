@@ -31,7 +31,7 @@ class StructuredLogFormatter implements FormatterInterface
      * A UUID that groups all records in the current process.
      * The process is usually a request, but might also be a job, command, etc.
      */
-    private string $uuid;
+    private string $traceId;
 
     /**
      * The request associated with this process
@@ -41,7 +41,6 @@ class StructuredLogFormatter implements FormatterInterface
 
     public function __construct()
     {
-        $this->uuid = Str::uuid()->toString();
         $this->request = $this->getRequest();
     }
 
@@ -70,7 +69,7 @@ class StructuredLogFormatter implements FormatterInterface
         $formattedRecord['level'] = $record['level_name'];
         $formattedRecord['message'] = $record['message'];
         $formattedRecord['process_context'] = $this->getProcessContext();
-        $formattedRecord['process_id'] = $this->uuid;
+        $formattedRecord['trace_id'] = $this->getTraceId();
         $formattedRecord['process_start'] = $this->getProcessStart();
         $formattedRecord['remote_address'] = $this->getRemoteAddress();
         $formattedRecord['request_method'] = $this->getRequestMethod();
@@ -297,5 +296,24 @@ class StructuredLogFormatter implements FormatterInterface
     final protected function isDataChange(array $record): bool
     {
         return Arr::exists($record['context'], LogTypes::DATA_CHANGED);
+    }
+
+    // getTraceId will get the UUID for the trace from the header.
+    // If there is no header, we create the traceId ourselves.
+    private function getTraceId(): string
+    {
+        if (isset($this->traceId)) {
+            return $this->traceId;
+        }
+
+        if (is_null($this->request) || is_null($this->request->header())) {
+            $this->traceId = Str::uuid()->toString();
+
+            return $this->traceId;
+        }
+
+        $this->traceId = $this->request->header('x-trace-id');
+
+        return $this->traceId;
     }
 }

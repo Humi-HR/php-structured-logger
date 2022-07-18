@@ -4,6 +4,7 @@ namespace Humi\StructuredLogger\Tests;
 
 use Humi\StructuredLogger\LogTypes;
 use Humi\StructuredLogger\StructuredLogFormatter;
+use Illuminate\Http\Request;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 
@@ -30,7 +31,7 @@ class StructuredLogFormatterTest extends TestCase
         $this->assertArrayHasKey('args', $formattedRecord);
         $this->assertArrayHasKey('status_code', $formattedRecord);
         $this->assertArrayHasKey('process_context', $formattedRecord);
-        $this->assertArrayHasKey('process_id', $formattedRecord);
+        $this->assertArrayHasKey('trace_id', $formattedRecord);
         $this->assertArrayHasKey('delta', $formattedRecord);
 
         $this->assertSame('INFO', $formattedRecord['level']);
@@ -133,5 +134,48 @@ class StructuredLogFormatterTest extends TestCase
 
         $this->assertSame('123', $formattedRecord['data_id']);
         $this->assertSame('SOME\TYPE', $formattedRecord['data_type']);
+    }
+
+    /** @test */
+    public function it_sets_a_trace_id(): void
+    {
+        /**
+         * @var StructuredLogFormatter $formatter
+         */
+        $formatter = new StructuredLogFormatter();
+
+        $record = [
+            'level' => Logger::INFO,
+            'datetime' => '2021-03-29',
+            'level_name' => 'INFO',
+            'message' => 'Some message',
+            'context' => [],
+        ];
+
+        $formattedRecord = $formatter->format($record);
+
+        $this->assertNotNull(
+            $formattedRecord['trace_id'],
+            'a trace id should be set even if none is passed in through the header'
+        );
+
+        $testFormatter = new class extends StructuredLogFormatter {
+            protected function getRequest(): ?Request
+            {
+                $request = new Request();
+                $request->headers->set('x-trace-id', 'my-trace-id');
+                $request->server->set('REMOTE_ADDR', '1.1.1.1');
+
+                return $request;
+            }
+        };
+
+        $formattedRecord = $testFormatter->format($record);
+
+        $this->assertSame(
+            'my-trace-id',
+            $formattedRecord['trace_id'],
+            'the trace id should be identical to that of the header'
+        );
     }
 }
