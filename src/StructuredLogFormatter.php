@@ -306,7 +306,7 @@ class StructuredLogFormatter implements FormatterInterface
             return $this->traceId;
         }
 
-        if (is_null($this->request) || is_null($this->request->header())) {
+        if (is_null($this->request) || is_null($this->request->header('x-trace-id'))) {
             $this->traceId = Str::uuid()->toString();
 
             return $this->traceId;
