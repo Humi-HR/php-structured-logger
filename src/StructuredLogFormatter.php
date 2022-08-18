@@ -158,12 +158,12 @@ class StructuredLogFormatter implements FormatterInterface
             return '';
         }
 
-        // the last ip address in the array _should_ be the client's original IP address
-        // see symfony/HttpFoundation/request
-        $ips = $this->request->ips();
-        $lastIp = $ips[count($ips) - 1];
+        $xForwardedFor = $this->request->header('X-Forwarded-For', 'no forwarded ip');
 
-        return $lastIp;
+        $ips = is_array($xForwardedFor) ? $xForwardedFor : explode(', ', $xForwardedFor);
+        $ip = $ips[0];
+
+        return $ip;
     }
 
     final protected function getRequestURL(): string
